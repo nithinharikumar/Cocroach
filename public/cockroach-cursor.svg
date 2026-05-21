@@ -1,0 +1,20 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'>
+  <!-- Antennae -->
+  <path d='M15 8 C 13 4, 11 3, 8 3' fill='none' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M17 8 C 19 4, 21 3, 24 3' fill='none' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <!-- Legs -->
+  <path d='M12 14 L6 11' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M11 18 L5 18' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M12 22 L6 25' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M20 14 L26 11' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M21 18 L27 18' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <path d='M20 22 L26 25' stroke='#39FF14' stroke-width='1.2' stroke-linecap='round'/>
+  <!-- Body -->
+  <ellipse cx='16' cy='18' rx='4.5' ry='8' fill='#121212' stroke='#39FF14' stroke-width='1.5'/>
+  <!-- Body details/segments -->
+  <line x1='12' y1='14' x2='20' y2='14' stroke='#39FF14' stroke-width='1'/>
+  <line x1='11.5' y1='18' x2='20.5' y2='18' stroke='#39FF14' stroke-width='1'/>
+  <line x1='12' y1='22' x2='20' y2='22' stroke='#39FF14' stroke-width='1'/>
+  <!-- Head -->
+  <ellipse cx='16' cy='9.5' rx='2.2' ry='1.8' fill='#39FF14'/>
+</svg>

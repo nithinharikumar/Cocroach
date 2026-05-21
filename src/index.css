@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Fredoka', system-ui, sans-serif;
+  --font-doodle: 'Gochi Hand', cursive, sans-serif;
+  --font-typewriter: 'Special Elite', monospace;
+  --font-mono: 'Special Elite', monospace;
+  --font-gothic: 'UnifrakturMaguntia', serif;
+  
+  --color-retro-saffron: #E26D5C;
+  --color-retro-green: #4F772D;
+  --color-retro-yellow: #E9C46A;
+  --color-retro-ink: #1E1E1E;
+  --color-retro-paper: #FAF6EE;
+  --color-retro-card: #FDFBF7;
+}
+
+/* Custom CSS classes for Doodle Retro theme */
+
+/* Doodle Notebook/Graph Paper Pattern */
+.doodle-grid {
+  background-color: var(--color-retro-paper);
+  background-image: 
+    linear-gradient(rgba(30, 30, 30, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 30, 30, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Notebook Margin Line */
+.doodle-margin {
+  border-left: 2px double rgba(226, 109, 92, 0.4);
+}
+
+/* Hand-drawn Sketch Border Effect */
+.doodle-border {
+  border: 3px solid var(--color-retro-ink);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.doodle-border-thin {
+  border: 2px solid var(--color-retro-ink);
+  border-radius: 120px 10px 110px 10px/10px 110px 10px 120px;
+}
+
+/* Brutalist Solid Shadows */
+.doodle-shadow-saffron {
+  box-shadow: 4px 4px 0px var(--color-retro-ink);
+}
+
+.doodle-shadow-green {
+  box-shadow: 4px 4px 0px var(--color-retro-ink);
+}
+
+/* Comic Retro Doodle Card */
+.doodle-card {
+  background-color: var(--color-retro-card);
+  border: 3px solid var(--color-retro-ink);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 5px 5px 0px var(--color-retro-ink);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.doodle-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0px var(--color-retro-ink);
+}
+
+/* Doodle Interactive Buttons */
+.doodle-btn {
+  background-color: var(--color-retro-card);
+  color: var(--color-retro-ink);
+  border: 3px solid var(--color-retro-ink);
+  border-radius: 205px 15px 225px 15px/15px 225px 15px 205px;
+  box-shadow: 4px 4px 0px var(--color-retro-ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
+  cursor: pointer;
+}
+
+.doodle-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--color-retro-ink);
+}
+
+.doodle-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--color-retro-ink);
+}
+
+/* Highlighter Ink Effects */
+.marker-yellow {
+  background: linear-gradient(120deg, rgba(233, 196, 106, 0.4) 0%, rgba(233, 196, 106, 0.6) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.marker-green {
+  background: linear-gradient(120deg, rgba(81, 178, 154, 0.4) 0%, rgba(81, 178, 154, 0.6) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.marker-saffron {
+  background: linear-gradient(120deg, rgba(226, 109, 92, 0.35) 0%, rgba(226, 109, 92, 0.55) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline;
+}
+
+/* Hand-drawn Wiggle Animation on Hover */
+@keyframes doodleWiggle {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  20% { transform: rotate(-0.8deg) translate(-1px, 0px); }
+  40% { transform: rotate(0.5deg) translate(1px, -1px); }
+  60% { transform: rotate(-0.5deg) translate(-1px, 1px); }
+  80% { transform: rotate(0.8deg) translate(1px, 0px); }
+  100% { transform: rotate(0deg) translate(0, 0); }
+}
+
+.doodle-wiggle:hover {
+  animation: doodleWiggle 0.35s infinite linear;
+}
+
+/* Page cursor settings */
+html, body, #root, * {
+  cursor: url('/cockroach-cursor.svg') 16 16, auto;
+}
+
+body {
+  background-color: var(--color-retro-paper);
+  color: var(--color-retro-ink);
+  margin: 0;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-retro-ink) var(--color-retro-paper);
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  min-height: 100vh;
+  display: block;
+}
+
+/* Custom scrollbar for retro sketchbook look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-retro-paper);
+  border-left: 2px solid var(--color-retro-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-retro-yellow);
+  border: 2px solid var(--color-retro-ink);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-retro-saffron);
+}
+
+/* Base style for range input to ensure consistent cross-browser look */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--color-retro-paper);
+  border: 2px solid var(--color-retro-ink);
+  border-radius: 9999px;
+  outline: none;
+}
+
+/* Cyber/Doodle March Lead Equalizer Animation */
+@keyframes eqBar {
+  0% { height: 3px; }
+  100% { height: 16px; }
+}
+
+.eq-bar-1 {
+  animation: eqBar 0.5s ease-in-out infinite alternate;
+}
+
+.eq-bar-2 {
+  animation: eqBar 0.7s ease-in-out infinite alternate 0.15s;
+}
+
+.eq-bar-3 {
+  animation: eqBar 0.4s ease-in-out infinite alternate 0.3s;
+}
+
+/* Retro range input styling */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-retro-saffron);
+  border: 2.5px solid var(--color-retro-ink);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--color-retro-ink);
+  transition: transform 0.1s ease-in-out, background-color 0.1s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--color-retro-yellow);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--color-retro-ink);
+  border-radius: 50%;
+  background: var(--color-retro-saffron);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--color-retro-ink);
+  transition: transform 0.1s ease-in-out, background-color 0.1s;
+}
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background: var(--color-retro-yellow);
+}
+
+/* Vintage Newspaper styling */
+.newspaper-container {
+  background-color: var(--color-retro-card);
+  border: 4px solid var(--color-retro-ink);
+  box-shadow: 10px 10px 0px var(--color-retro-ink);
+}
+
+.newspaper-header-line {
+  border-top: 6px solid var(--color-retro-ink);
+  border-bottom: 2px solid var(--color-retro-ink);
+  height: 10px;
+  margin: 8px 0;
+}
+
+.newspaper-double-divider {
+  border-top: 2px dashed var(--color-retro-ink);
+  border-bottom: 1px solid var(--color-retro-ink);
+  height: 6px;
+  margin: 12px 0;
+}
+
+.newspaper-col-divider {
+  border-right: 2px solid var(--color-retro-ink);
+}
+
+.newspaper-text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.newspaper-lead-cap::first-letter {
+  float: left;
+  font-size: 3.5rem;
+  line-height: 2.8rem;
+  padding-right: 10px;
+  padding-top: 4px;
+  font-family: var(--font-typewriter);
+  font-weight: 900;
+  color: var(--color-retro-saffron);
+  text-shadow: 2px 2px 0px var(--color-retro-ink);
+}
+
