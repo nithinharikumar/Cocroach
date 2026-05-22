@@ -183,7 +183,7 @@ const translations = {
     crossword_desc: 'नीचे दिए गए शब्दों को खोजें: ROACH, LAZY, CJP'
   },
   english: {
-    title: 'Cockroach Janta Party (CJP)',
+    title: 'Cockroach Janatha Party (CJP)',
     tagline: 'Now Rule belongs to Cockroaches!',
     hero_h1_part1: 'Resistance.',
     hero_h1_part2: 'Immortality.',
@@ -210,7 +210,7 @@ const translations = {
     manifesto_tab: 'Serious Manifesto',
     
     history_title: 'Origin Story (THE ORIGIN STORY)',
-    history_p1: 'The Cockroach Janta Party (CJP) was founded by Abhijeet Dipke, a 30-year-old political communications strategist and Boston University student. The movement was sparked by a controversial comment made during a Supreme Court hearing.',
+    history_p1: 'The Cockroach Janatha Party (CJP) was founded by Abhijeet Dipke, a 30-year-old political communications strategist and Boston University student. The movement was sparked by a controversial comment made during a Supreme Court hearing.',
     history_p2: 'After reports that unemployed youth were compared to "cockroaches" and "parasites of society" by the Chief Justice (later clarified as targeting fake degree practitioners), the internet embraced the insult as a badge of honor. Youth launched the campaign with the slogan "Main Bhi Cockroach".',
     history_quote: '"They tried to crush us, but we are the ones who survive nuclear explosions!"',
 
@@ -260,7 +260,7 @@ const translations = {
 
 function App() {
   // State
-  const [lang, setLang] = useState('malayalam')
+  const [lang, setLang] = useState('hindi')
   const [falloutLevel, setFalloutLevel] = useState(60)
   const [scuttleActive, setScuttleActive] = useState(false)
   const [scuttleTimer, setScuttleTimer] = useState(0)
@@ -384,6 +384,46 @@ function App() {
       clearInterval(interval)
     }
   }, [scuttleActive])
+
+  useEffect(() => {
+    let chantInterval;
+    if (bgmActive && !isMuted && !isSpeaking) {
+      const playChant = () => {
+        if ('speechSynthesis' in window && !window.speechSynthesis.speaking && !isSpeaking) {
+          const chantText = 
+            lang === 'malayalam' ? 'കോക്രോച്ച് ജനതാ പാർട്ടി സിന്ദാബാദ്!' : 
+            lang === 'hindi' ? 'कॉकरोच जनता पार्टी जिंदाबाद!' : 
+            'Cockroach Janatha Party Zindabad!';
+          
+          const utterance = new SpeechSynthesisUtterance(chantText);
+          const voices = window.speechSynthesis.getVoices();
+          let voiceSelected = null;
+          if (lang === 'malayalam') {
+            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('ml') || v.lang.toLowerCase().includes('ml-in'));
+          } else if (lang === 'hindi') {
+            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('hi') || v.lang.toLowerCase().includes('hi-in'));
+          } else {
+            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('en'));
+          }
+          if (voiceSelected) {
+            utterance.voice = voiceSelected;
+          }
+          utterance.lang = lang === 'malayalam' ? 'ml-IN' : lang === 'hindi' ? 'hi-IN' : 'en-US';
+          utterance.rate = 1.05;
+          utterance.volume = 0.55;
+          window.speechSynthesis.speak(utterance);
+        }
+      };
+      
+      const firstChantTimeout = setTimeout(playChant, 1500);
+      chantInterval = setInterval(playChant, 7000);
+      
+      return () => {
+        clearTimeout(firstChantTimeout);
+        clearInterval(chantInterval);
+      };
+    }
+  }, [bgmActive, isMuted, lang, isSpeaking]);
 
   const initAudio = () => {
     if (!audioCtxRef.current) {
@@ -760,7 +800,7 @@ function App() {
         </div>
         {[
           { id: 'page-1', label: 'Page 1: Front Bulletin' },
-          { id: 'page-2', label: 'Page 2: National Gazette' },
+          { id: 'page-2', label: 'Page 2: Cockroach Janatha Party' },
           { id: 'page-3', label: 'Page 3: Op-Ed & Origin' },
           { id: 'page-4', label: 'Page 4: Situations Vacant' },
           { id: 'page-5', label: 'Page 5: Sports & Leisure' },
@@ -784,7 +824,7 @@ function App() {
       <div className="sticky top-0 z-40 w-full max-w-6xl mx-auto mb-6 bg-retro-card/90 backdrop-blur border-3 border-retro-ink p-3 shadow-[4px_4px_0px_#1e1e1e] flex flex-wrap items-center justify-between gap-3 rounded-2xl pointer-events-auto">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); playSynthesizer('click'); }}>
           <CJPLogo className="w-8 h-8" />
-          <span className="font-gothic text-xl font-bold tracking-wide text-retro-ink">The CJP Gazette</span>
+          <span className="font-gothic text-xl font-bold tracking-wide text-retro-ink">Cockroach Janatha Party</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -861,7 +901,7 @@ function App() {
                 <CJPLogo className="w-14 h-14" />
                 <div>
                   <h1 className="font-gothic text-4xl md:text-6xl text-retro-ink leading-none">
-                    {lang === 'malayalam' ? 'കോക്രോച്ച് ജനതാ ഗസറ്റ്' : lang === 'hindi' ? 'कॉकरोच जनता गजट' : 'The Cockroach Janta Gazette'}
+                    {lang === 'malayalam' ? 'കോക്രോച്ച് ജനതാ പാർട്ടി' : lang === 'hindi' ? 'कॉकरोच जनता पार्टी' : 'Cockroach Janatha Party'}
                   </h1>
                   <p className="font-typewriter text-[10px] text-retro-green font-black uppercase tracking-wider mt-1">
                     {lang === 'malayalam' ? 'ദേശീയ അധിനിവേശ ലീഗ്' : lang === 'hindi' ? 'राष्ट्रीय आक्रमण लीग' : 'National Infestation League'}
@@ -1290,7 +1330,7 @@ function App() {
         <div id="page-6" className="w-full pt-8">
           <header className="w-full flex flex-col items-center mb-6">
             <div className="w-full flex justify-between text-[9px] font-typewriter text-retro-ink/75 uppercase font-black px-1 pb-1 font-gothic">
-              <span>The CJP Official Gazette</span>
+              <span>Cockroach Janatha Party</span>
               <span>Thursday, May 21, 2026</span>
               <span>Page 6 of 6</span>
             </div>
