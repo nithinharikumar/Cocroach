@@ -344,10 +344,16 @@ function App() {
   
   const isMutedRef = useRef(isMuted)
   const falloutLevelRef = useRef(falloutLevel)
+  const ytPlayerRef = useRef(null)
+  const bgmActiveRef = useRef(bgmActive)
 
   useEffect(() => {
     isMutedRef.current = isMuted
   }, [isMuted])
+
+  useEffect(() => {
+    bgmActiveRef.current = bgmActive
+  }, [bgmActive])
 
   useEffect(() => {
     falloutLevelRef.current = falloutLevel
@@ -386,44 +392,73 @@ function App() {
   }, [scuttleActive])
 
   useEffect(() => {
-    let chantInterval;
-    if (bgmActive && !isMuted && !isSpeaking) {
-      const playChant = () => {
-        if ('speechSynthesis' in window && !window.speechSynthesis.speaking && !isSpeaking) {
-          const chantText = 
-            lang === 'malayalam' ? 'കോക്രോച്ച് ജനതാ പാർട്ടി സിന്ദാബാദ്!' : 
-            lang === 'hindi' ? 'कॉकरोच जनता पार्टी जिंदाबाद!' : 
-            'Cockroach Janatha Party Zindabad!';
-          
-          const utterance = new SpeechSynthesisUtterance(chantText);
-          const voices = window.speechSynthesis.getVoices();
-          let voiceSelected = null;
-          if (lang === 'malayalam') {
-            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('ml') || v.lang.toLowerCase().includes('ml-in'));
-          } else if (lang === 'hindi') {
-            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('hi') || v.lang.toLowerCase().includes('hi-in'));
-          } else {
-            voiceSelected = voices.find(v => v.lang.toLowerCase().includes('en'));
-          }
-          if (voiceSelected) {
-            utterance.voice = voiceSelected;
-          }
-          utterance.lang = lang === 'malayalam' ? 'ml-IN' : lang === 'hindi' ? 'hi-IN' : 'en-US';
-          utterance.rate = 1.05;
-          utterance.volume = 0.55;
-          window.speechSynthesis.speak(utterance);
-        }
-      };
-      
-      const firstChantTimeout = setTimeout(playChant, 1500);
-      chantInterval = setInterval(playChant, 7000);
-      
-      return () => {
-        clearTimeout(firstChantTimeout);
-        clearInterval(chantInterval);
-      };
+    // 1. Load the IFrame Player API code asynchronously.
+    if (!document.getElementById('youtube-iframe-api')) {
+      const tag = document.createElement('script');
+      tag.id = 'youtube-iframe-api';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
-  }, [bgmActive, isMuted, lang, isSpeaking]);
+
+    // 2. Define the callback when ready
+    window.onYouTubeIframeAPIReady = () => {
+      ytPlayerRef.current = new window.YT.Player('youtube-bg-player', {
+        height: '100',
+        width: '100',
+        videoId: '8ez2L5J08hY',
+        playerVars: {
+          playsinline: 1,
+          loop: 1,
+          playlist: '8ez2L5J08hY',
+          controls: 0,
+          showinfo: 0,
+          rel: 0,
+          enablejsapi: 1
+        },
+        events: {
+          onReady: (event) => {
+            if (isMutedRef.current) {
+              event.target.mute();
+            } else {
+              event.target.unMute();
+              event.target.setVolume(50);
+            }
+            if (bgmActiveRef.current) {
+              event.target.playVideo();
+            }
+          }
+        }
+      });
+    };
+
+    if (window.YT && window.YT.Player) {
+      window.onYouTubeIframeAPIReady();
+    }
+  }, []);
+
+  useEffect(() => {
+    const player = ytPlayerRef.current;
+    if (player && typeof player.playVideo === 'function') {
+      if (bgmActive) {
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+    }
+  }, [bgmActive]);
+
+  useEffect(() => {
+    const player = ytPlayerRef.current;
+    if (player && typeof player.mute === 'function') {
+      if (isMuted) {
+        player.mute();
+      } else {
+        player.unMute();
+        player.setVolume(50);
+      }
+    }
+  }, [isMuted]);
 
   const initAudio = () => {
     if (!audioCtxRef.current) {
@@ -688,39 +723,10 @@ function App() {
 
   const startBgm = () => {
     initAudio()
-    const ctx = audioCtxRef.current
-    if (!ctx) return
-    
-    if (bgmIntervalRef.current) {
-      clearInterval(bgmIntervalRef.current)
-    }
-    
     setBgmActive(true)
-    bgmStepRef.current = 0
-    nextNoteTimeRef.current = ctx.currentTime
-    
-    const scheduler = () => {
-      const currentCtx = audioCtxRef.current
-      if (!currentCtx) return
-      
-      const currentTempo = 110 + (falloutLevelRef.current / 100) * 70
-      const stepTime = 60 / currentTempo / 2
-      
-      while (nextNoteTimeRef.current < currentCtx.currentTime + 0.1) {
-        scheduleStep(bgmStepRef.current, nextNoteTimeRef.current)
-        nextNoteTimeRef.current += stepTime
-        bgmStepRef.current = (bgmStepRef.current + 1) % 16
-      }
-    }
-    
-    bgmIntervalRef.current = setInterval(scheduler, 25)
   }
 
   const stopBgm = () => {
-    if (bgmIntervalRef.current) {
-      clearInterval(bgmIntervalRef.current)
-      bgmIntervalRef.current = null
-    }
     setBgmActive(false)
   }
 
@@ -1446,6 +1452,7 @@ function App() {
         )}
       </AnimatePresence>
 
+      <div id="youtube-bg-player" style={{ position: 'fixed', left: '-9999px', top: '-9999px', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}></div>
       <ConfettiOverlay trigger={confettiTrigger} />
       <CursorTrail />
     </div>
